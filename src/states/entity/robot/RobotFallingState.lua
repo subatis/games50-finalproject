@@ -87,6 +87,11 @@ function RobotFallingState:update(dt)
         end
     end
 
+    -- check if we are off the screen
+    if self.robot.y > VIRTUAL_HEIGHT then
+        self.robot:changeState('dying')
+    end
+
     --[[ DEBUG: manual input
     -- if impassible, switch states
     if (tileBottomLeft and tileBottomRight) and (tileBottomLeft.impassible or tileBottomRight.impassible) then

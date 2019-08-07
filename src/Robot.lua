@@ -23,6 +23,10 @@ function Robot:checkLeftCollisions(dt, topCollision)
 
     -- place player outside the X bounds on one of the tiles to reset any overlap
     if (tileTopLeft and tileBottomLeft) and (tileTopLeft.impassible or tileBottomLeft.impassible) then
+        -- check for spikes
+        if tileTopLeft.deadly or tileBottomleft.deadly then
+            self:changeState('dying')
+        end
         self.x = (tileTopLeft.x - 1) * TILE_SIZE + tileTopLeft.width - 1
         return true
     end
@@ -55,6 +59,9 @@ function Robot:checkRightCollisions(dt, topCollision)
 
     -- place player outside the X bounds on one of the tiles to reset any overlap
     if (tileTopRight and tileBottomRight) and (tileTopRight.impassible or tileBottomRight.impassible) then
+        if tileTopRight.deadly or tileBottomRight.deadly then
+            self:changeState('dying')
+        end
         self.x = (tileTopRight.x - 1) * TILE_SIZE - self.width
         return true
     end

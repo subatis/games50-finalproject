@@ -38,6 +38,7 @@ require 'src/states/game/StartState'
 require 'src/states/game/PlayState'
 require 'src/states/game/CountdownState'
 require 'src/states/game/GameOverState'
+require 'src/states/game/VictoryState'
 
 -- constants -------------------------------------------------------------------
 -- general
@@ -84,8 +85,20 @@ TILEDEFS = {
     ['PIPE_MIDDLE'] = 1,
     ['PIPE_END_LEFT'] = 17,
     ['PIPE_END_RIGHT'] = 18,
+    ['PIPE_BEND_TOP_LEFT'] = 5,
+    ['PIPE_BEND_TOP_RIGHT'] = 6,
+    ['PIPE_BEND_BTM_LEFT'] = 21,
+    ['PIPE_BEND_BTM_RIGHT'] = 22,
+    ['PIPE_VERT_MIDDLE'] = 3,
 
-    ['BLOCK_PLAIN'] = 33
+    ['BLOCK_PLAIN'] = 33,
+    ['BLOCK_CROSS'] = 35,
+    ['BLOCK_FLAT_LINES'] = 40,
+
+    ['DECORATIVE_GRATE_HORIZ'] = 78,
+    ['DECORATIVE_GRATE_VERT'] = 77,
+
+    ['SPIKES_LEFT'] = 75
 }
 
 -- robot frame definitions
@@ -165,3 +178,85 @@ gFrames = {
    ['robot_death'] = GenerateQuads(gTextures['robot_death'], 17, 18),
    ['doors'] = GenerateQuads(gTextures['doors'], 32, 64)
 }
+
+-- levels
+function initMap1(tilemap)
+    -- in and out doors
+    tilemap.inDoorX = 3
+    tilemap.inDoorY = 3
+    tilemap.outDoorX = 9
+    tilemap.outDoorY = tilemap.height - 2
+
+    -- pipe along ground with end caps
+    tilemap.tiles[tilemap.height][8] = Tile(8, tilemap.height, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_END_LEFT']], true, false)
+    for x = 9, tilemap.width - 8 do
+        tilemap.tiles[tilemap.height][x] = Tile(x, tilemap.height, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+    end
+    tilemap.tiles[tilemap.height][tilemap.width - 7] = Tile(tilemap.width - 7, tilemap.height, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_END_RIGHT']], true, false)
+
+    -- pipe high up near spawn point with end cap
+    for x = 1, 8 do
+        tilemap.tiles[5][x] = Tile(x, 5, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+    end
+    tilemap.tiles[5][9] = Tile(9, 5, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_END_RIGHT']], true, false)
+
+    -- decorative pipes underneath spawn point
+    tilemap.tiles[6][6] = Tile(6, 6, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_BEND_TOP_RIGHT']], true, false)
+    for x = 1, 5 do
+        tilemap.tiles[6][x] = Tile(x, 6, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+        tilemap.tiles[6][x] = Tile(x, 6, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+        tilemap.tiles[6][x] = Tile(x, 6, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+        tilemap.tiles[6][x] = Tile(x, 6, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+    end
+    tilemap.tiles[7][6] = Tile(6, 7, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_BEND_BTM_RIGHT']], true, false)
+    tilemap.tiles[7][5] = Tile(5, 7, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_BEND_TOP_LEFT']], true, false)
+    for y = 8, tilemap.height do
+        tilemap.tiles[y][5] = Tile(5, y, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_VERT_MIDDLE']], true, false)
+    end
+    for x = 1, 4 do
+        tilemap.tiles[tilemap.height - 1][x] = Tile(x, tilemap.height - 1, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+    for x = 1, 4 do
+        tilemap.tiles[tilemap.height - 4][x] = Tile(x, tilemap.height - 4, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+    for x = 1, 4 do
+        tilemap.tiles[tilemap.height - 7][x] = Tile(x, tilemap.height - 7, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+
+    -- vertical grate & spikes
+    for y = tilemap.height - 3, tilemap.height - 1 do
+        tilemap.tiles[y][tilemap.width - 7] = Tile(tilemap.width - 7, y, tilemap.tilesetImg, tilemap.quads[TILEDEFS['BLOCK_FLAT_LINES']], true, false)
+    end
+    for y = 1, tilemap.height - 4 do
+        tilemap.tiles[y][tilemap.width - 7] = Tile(tilemap.width - 7, y, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_VERT']], true, false)
+    end
+    for y = tilemap.height - 3, tilemap.height - 1 do
+        tilemap.tiles[y][tilemap.width - 8] = Tile(tilemap.width - 8, y, tilemap.tilesetImg, tilemap.quads[TILEDEFS['SPIKES_LEFT']], true, false, true)
+    end
+
+    -- decoration on right side of map
+    for y = 6, tilemap.height do
+        tilemap.tiles[y][tilemap.width - 5] = Tile(tilemap.width - 5, y, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_VERT_MIDDLE']], true, false)
+    end
+    tilemap.tiles[5][tilemap.width - 5] = Tile(tilemap.width - 5, 5, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_BEND_TOP_LEFT']], true, false)
+    for x = tilemap.width - 4, tilemap.width do
+        tilemap.tiles[5][x] = Tile(x, 5, tilemap.tilesetImg, tilemap.quads[TILEDEFS['PIPE_MIDDLE']], true, false)
+    end
+    for x = tilemap.width - 4, tilemap.width do
+        tilemap.tiles[tilemap.height - 1][x] = Tile(x, tilemap.height - 1, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+    for x = tilemap.width - 4, tilemap.width do
+        tilemap.tiles[tilemap.height - 4][x] = Tile(x, tilemap.height - 4, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+    for x = tilemap.width - 4, tilemap.width do
+        tilemap.tiles[tilemap.height - 7][x] = Tile(x, tilemap.height - 7, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+    for x = tilemap.width - 4, tilemap.width do
+        tilemap.tiles[tilemap.height - 10][x] = Tile(x, tilemap.height - 10, tilemap.tilesetImg, tilemap.quads[TILEDEFS['DECORATIVE_GRATE_HORIZ']], true, false)
+    end
+
+    tilemap.tiles[4][tilemap.width - 3] = Tile(tilemap.width - 3, 4, tilemap.tilesetImg, tilemap.quads[TILEDEFS['BLOCK_PLAIN']], true, false)
+    tilemap.tiles[4][tilemap.width - 2] = Tile(tilemap.width - 2, 4, tilemap.tilesetImg, tilemap.quads[TILEDEFS['BLOCK_CROSS']], true, false)
+    tilemap.tiles[3][tilemap.width - 2] = Tile(tilemap.width - 2, 3, tilemap.tilesetImg, tilemap.quads[TILEDEFS['BLOCK_PLAIN']], true, false)
+    tilemap.tiles[4][tilemap.width - 1] = Tile(tilemap.width - 1, 4, tilemap.tilesetImg, tilemap.quads[TILEDEFS['BLOCK_PLAIN']], true, false)
+end

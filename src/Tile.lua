@@ -1,6 +1,6 @@
 Tile = Class{}
 
-function Tile:init(x, y, srcImg, quad, impassible, destructible)
+function Tile:init(x, y, srcImg, quad, impassible, destructible, deadly)
     self.x = x
     self.y = y
     self.width = TILE_SIZE
@@ -9,6 +9,7 @@ function Tile:init(x, y, srcImg, quad, impassible, destructible)
     self.quad = quad
     self.impassible = impassible or false
     self.destructible = destructible or false
+    self.deadly = deadly or false
 end
 
 function Tile:draw()

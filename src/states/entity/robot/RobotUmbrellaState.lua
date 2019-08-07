@@ -76,4 +76,9 @@ function RobotUmbrellaState:update(dt)
             end
         end
     end
+
+    -- check if we are off the screen
+    if self.robot.y > VIRTUAL_HEIGHT then
+        self.robot:changeState('dying')
+    end
 end

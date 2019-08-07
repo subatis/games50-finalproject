@@ -37,8 +37,13 @@ end
 
 function Level:checkVictory()
     if self.robotsSaved >= self.goalRobots then
-        -- TODO gLevelNum = gLevelNum + 1
-        gStateMachine:change('countdown')
+        -- did we beat the game?
+        if gLevelNum == 1 then
+            gStateMachine:change('victory')
+        else
+            -- TODO gLevelNum = gLevelNum + 1
+            gStateMachine:change('countdown')
+        end
     end
 end
 
