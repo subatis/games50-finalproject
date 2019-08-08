@@ -171,7 +171,11 @@ gSounds = {
     ['robot_jump'] = love.audio.newSource('assets/jump7.wav'),
     ['gui_select'] = love.audio.newSource('assets/select3.wav'),
     ['robot_block'] = love.audio.newSource('assets/block.wav'),
-    ['robot_umbrella'] = love.audio.newSource('assets/umbrella.wav')
+    ['robot_umbrella'] = love.audio.newSource('assets/umbrella.wav'),
+    ['countdown'] = love.audio.newSource('assets/countdown.wav'),
+    ['gameover'] = love.audio.newSource('assets/gameover.wav'),
+    ['nextlevel'] = love.audio.newSource('assets/nextlevel.wav'),
+    ['victory'] = love.audio.newSource('assets/win_sound_1.wav')
 }
 
 gTextures = {

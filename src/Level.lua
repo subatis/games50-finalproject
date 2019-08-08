@@ -43,9 +43,13 @@ end
 function Level:checkVictory()
     if self.robotsSaved >= self.goalRobots then
         if gLevelNum == 3 then
+            gSounds['music']:pause()
+            gSounds['victory']:play()
+            Timer.after(3, function() gSounds['music']:resume() end)
             gLevelNum = 1
             gStateMachine:change('victory')
         else
+            gSounds['nextlevel']:play()
             gLevelNum = gLevelNum + 1
             gStateMachine:change('countdown')
         end
@@ -55,6 +59,7 @@ end
 -- are we screwed?
 function Level:checkGameOver()
     if self.numRobots - self.robotsLost < self.goalRobots then
+        gSounds['gameover']:play()
         gLevelNum = 1
         gStateMachine:change('gameover')
     end

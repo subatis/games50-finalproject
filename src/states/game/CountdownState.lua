@@ -32,6 +32,7 @@ function CountdownState:update(dt)
     if self.timer > COUNTDOWN_TIME then
         self.timer = self.timer % COUNTDOWN_TIME
         self.count = self.count - 1
+        gSounds['countdown']:play()
 
         -- when 0 is reached, we should enter the PlayState
         if self.count == 0 then
@@ -45,5 +46,6 @@ function CountdownState:render()
 
     -- render count big in the middle of the screen
     love.graphics.setFont(gFonts['huge'])
+    love.graphics.printf('level ' .. tostring(gLevelNum), 0, 50, VIRTUAL_WIDTH, 'center')
     love.graphics.printf(tostring(self.count), 0, 120, VIRTUAL_WIDTH, 'center')
 end
