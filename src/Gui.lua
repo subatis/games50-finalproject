@@ -1,5 +1,8 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 Gui = Class{}
 
+-- references the image for the GUI buttons and the level for the GUI (mostly to access the player)
 function Gui:init(guiImg, level)
     self.guiImg = guiImg
     self.level = level
@@ -27,10 +30,10 @@ function Gui:update(dt)
             if buttonPressed < 0 then return
             -- deselect if we click the same tool twice
             elseif buttonPressed == self.level.player.tool then
-                print('deselected; tool #' ..tostring(buttonPressed))
+                gSounds['gui_select']:play()
                 self.level.player.tool = nil
             else
-                print('tool pressed; tool #' ..tostring(buttonPressed))
+                gSounds['gui_select']:play()
                 self.level.player.tool = buttonPressed
             end
 
@@ -39,12 +42,16 @@ function Gui:update(dt)
 
     --keyboard:
     if love.keyboard.wasPressed('1') then
+        gSounds['gui_select']:play()
         if self.level.player.tool == 1 then self.level.player.tool = nil else self.level.player.tool = 1 end
     elseif love.keyboard.wasPressed('2') then
+        gSounds['gui_select']:play()
         if self.level.player.tool == 2 then self.level.player.tool = nil else self.level.player.tool = 2 end
     elseif love.keyboard.wasPressed('3') then
+        gSounds['gui_select']:play()
         if self.level.player.tool == 3 then self.level.player.tool = nil else self.level.player.tool = 3 end
     elseif love.keyboard.wasPressed('`') then
+        gSounds['gui_select']:play()
         self.level.player.tool = nil
     end
 end

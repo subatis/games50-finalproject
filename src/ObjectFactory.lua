@@ -1,8 +1,11 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50
+
+    This class manufactures game objects just using key parameters. ]]
+
 ObjectFactory = Class{}
+function ObjectFactory:init() end
 
-function ObjectFactory:init()
-end
-
+-- Make a robot based off of global parameters at x,y,direction with a reference to the level it is in
 function ObjectFactory:makeRobot(robotX, robotY, robotDirection, robotLevel)
     local robot -- declare first to ensure unique "copies" to pass into StateMachine
     robot = Robot({
@@ -36,6 +39,7 @@ function ObjectFactory:makeRobot(robotX, robotY, robotDirection, robotLevel)
     return robot
 end
 
+-- Make an entrance or exit for the level; doorType == 'in' or 'out'
 function ObjectFactory:makeDoor(doorX, doorY, doorLevel, doorType)
     local door -- declare first to ensure unique "copies" to pass into StateMachine
     door = Entity ({
@@ -57,6 +61,7 @@ function ObjectFactory:makeDoor(doorX, doorY, doorLevel, doorType)
     return door
 end
 
+-- Make invisible & impassible block at robot location when using block tool
 function ObjectFactory:makeInvisibleBlock(blockX, blockY, blockWidth, blockHeight)
     local block
     block = GameObject {

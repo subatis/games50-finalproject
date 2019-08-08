@@ -1,3 +1,5 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 RobotFallingState = Class{__includes = BaseState}
 
 function RobotFallingState:init(robot)
@@ -8,15 +10,14 @@ function RobotFallingState:init(robot)
         interval = 1
     }
     self.robot.currentAnimation = self.animation
+    self.terminalSoundPlayed = false -- flag to ensure we only play terminal falling sound once
 end
 
-function RobotFallingState:enter(params)
-    --print('Entered fall state')
-end
+function RobotFallingState:enter(params) end
 
+-- handle input; can apply umbrella
 function RobotFallingState:handleClick()
     if self.robot.level.player.tool == TOOLDEFS['UMBRELLA'] then
-        print('applied umbrella')
         self.robot:changeState('umbrella')
     end
 end
@@ -25,11 +26,15 @@ end
 function RobotFallingState:update(dt)
     self.robot.currentAnimation:update(dt)
     self.robot.dy = math.min(TERMINAL_VELOCITY, self.robot.dy + self.gravity)
-    --DEBUG: print(tostring(self.robot.dy))
     self.robot.y = self.robot.y + (self.robot.dy * dt)
 
     -- change sprite if we are at 'terminal velocity'
     if self.robot.dy == TERMINAL_VELOCITY then
+        if not self.terminalSoundPlayed then
+            gSounds['robot_terminal_fall']:play()
+            self.terminalSoundPlayed = true
+        end
+
         self.animation = Animation {
             frames = { ROBOTFRAMES['TERMINAL_FALLING'] },
             interval = 1
@@ -55,7 +60,7 @@ function RobotFallingState:update(dt)
             self.robot.y = (tileBottomLeft.y - 1) * TILE_SIZE - self.robot.height
         end
 
-    -- still falling; maintain x-direction momentum if we had any
+    -- still falling; maintain x-direction momentum if we had any and check left/right collisions
     elseif self.robot.dx < 0 then
         self.robot.x = self.robot.x + (self.robot.dx * dt)
         self.robot:checkLeftCollisions(dt)
@@ -80,9 +85,6 @@ function RobotFallingState:update(dt)
                     self.robot.dy = 0
                     self.robot:changeState('idle')
                 end
-            --elseif object.consumable then
-            --    object.onConsume(self.player)
-            --    table.remove(self.player.level.objects, k)
             end
         end
     end
@@ -91,30 +93,4 @@ function RobotFallingState:update(dt)
     if self.robot.y > VIRTUAL_HEIGHT then
         self.robot:changeState('dying')
     end
-
-    --[[ DEBUG: manual input
-    -- if impassible, switch states
-    if (tileBottomLeft and tileBottomRight) and (tileBottomLeft.impassible or tileBottomRight.impassible) then
-        self.robot.dy = 0
-
-        -- set the player to be walking or idle on landing depending on input
-        if love.keyboard.isDown('left') or love.keyboard.isDown('right') then
-            self.robot:changeState('walking')
-        else
-            self.robot:changeState('idle')
-        end
-
-        self.robot.y = (tileBottomLeft.y - 1) * TILE_SIZE - self.robot.height
-
-        -- check side collisions and reset position
-    elseif love.keyboard.isDown('left') then
-        self.robot.direction = 'left'
-        self.robot.x = self.robot.x - ROBOT_WALK_SPEED * dt
-        self.robot:checkLeftCollisions(dt)
-    elseif love.keyboard.isDown('right') then
-        self.robot.direction = 'right'
-        self.robot.x = self.robot.x + ROBOT_WALK_SPEED * dt
-        self.robot:checkRightCollisions(dt)
-    end
-    ]]
 end

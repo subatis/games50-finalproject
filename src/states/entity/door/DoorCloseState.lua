@@ -1,7 +1,11 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 DoorCloseState = Class{__includes = BaseState}
 
 function DoorCloseState:init(door)
     self.door = door
+
+    -- different animations for in vs. out door based on door.doorType
     self.animation = self.door.type == 'in' and Animation {
         frames = { DOORFRAMES['IN_10'],
                    DOORFRAMES['IN_9'],
@@ -34,15 +38,18 @@ function DoorCloseState:init(door)
     self.door.currentAnimation = self.animation
 end
 
-function DoorCloseState:enter(params)
+function DoorCloseState:enter(params) end
 
-end
-
+-- robots should wait for door to completely open, disappear and update level robotsSaved
 function DoorCloseState:onRobotCollide(robot)
+    -- if robot collides while door is closed, switch animations but maintain current
+    -- frame index for smooth animation
     if robot.collidable then
         local curFrame = self.door.currentAnimation.currentFrame
         self.door:changeState('open')
         self.door.currentAnimation.currentFrame = curFrame
+
+        -- calculate how long the door will take to open and then tween robot into the door (and fade)
         local tweenX = robot.direction == 'right' and (robot.x + TILE_SIZE) or (robot.x - TILE_SIZE)
         local timeToOpen = (#self.door.currentAnimation.frames - self.door.currentAnimation.currentFrame) * 0.1
         Timer.after(timeToOpen, function()
@@ -55,6 +62,7 @@ function DoorCloseState:onRobotCollide(robot)
     end
 end
 
+-- once door is shut, change to idle state
 function DoorCloseState:update(dt)
     self.door.currentAnimation:update(dt)
 

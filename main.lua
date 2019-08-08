@@ -1,3 +1,18 @@
+--[[
+    "DRONES" by Erik Subatis 2019
+
+    Final Project for GD50 (Harvard) Summer 2019 
+
+    Influenced by Lemmings (https://www.youtube.com/watch?v=xIuxB1oR2WQ)
+
+    Drones (robots) spawn intermittently until some maximum number dictated by the map/level
+    is reached. The goal is to guide some number of these drones (also dictated by the map/level)
+    to the exit door safely using a variety of tools (select tools with mouse on GUI or 1-x on
+    keyboard and then click drone to apply). Long falls or spikes will kill the robots.
+
+    See lib and/or dependencies for detailed credits (hump, knife, coltonoscopy (GD50))
+]]
+
 love.graphics.setDefaultFilter('nearest', 'nearest')
 require 'src/dependencies'
 
@@ -11,6 +26,10 @@ function love.load()
         resizable = true,
         canvas = false
     })
+
+    -- set music to loop and start
+    gSounds['music']:setLooping(true)
+    gSounds['music']:play()
 
     -- global state machine for game state
     gStateMachine = StateMachine {
@@ -33,6 +52,7 @@ function love.load()
     love.mouse.pressed = {}
 end
 
+-- resize window using push
 function love.resize(w, h)
     push:resize(w, h)
 end

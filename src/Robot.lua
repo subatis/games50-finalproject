@@ -1,8 +1,10 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50;
+     Core code is from GD50 (Harvard) originally ]]
+
 Robot = Class{__includes = Entity}
 
 function Robot:init(def)
     Entity.init(self, def)
-    self.exit = false
 end
 
 function Robot:update(dt)
@@ -23,10 +25,11 @@ function Robot:checkLeftCollisions(dt, topCollision)
 
     -- place player outside the X bounds on one of the tiles to reset any overlap
     if (tileTopLeft and tileBottomLeft) and (tileTopLeft.impassible or tileBottomLeft.impassible) then
-        -- check for spikes
-        if tileTopLeft.deadly or tileBottomleft.deadly then
+        -- check for deadly spikes/tiles
+        if tileTopLeft.deadly or tileBottomLeft.deadly then
             self:changeState('dying')
         end
+
         self.x = (tileTopLeft.x - 1) * TILE_SIZE + tileTopLeft.width - 1
         return true
     end
@@ -35,19 +38,13 @@ function Robot:checkLeftCollisions(dt, topCollision)
     self.y = self.y - 1
     local objectCollisions = self:checkObjectCollisions()
     self.y = self.y + 1
+
     for i, object in pairs(objectCollisions) do
         if self.x < object.x + object.width then
             self.x = self.x - self.dx * dt
             return true
         end
     end
-
-    --[[local objectCollisions = self:checkObjectCollisions()
-    if #objectCollisions > 0 then
-        --print('LEFT object collision detected')
-        self.x = self.x - self.dx * dt
-        return true
-    end]]
 
     return false
 end
@@ -59,9 +56,11 @@ function Robot:checkRightCollisions(dt, topCollision)
 
     -- place player outside the X bounds on one of the tiles to reset any overlap
     if (tileTopRight and tileBottomRight) and (tileTopRight.impassible or tileBottomRight.impassible) then
+        -- check for deadly spikes/tiles
         if tileTopRight.deadly or tileBottomRight.deadly then
             self:changeState('dying')
         end
+
         self.x = (tileTopRight.x - 1) * TILE_SIZE - self.width
         return true
     end
@@ -70,20 +69,13 @@ function Robot:checkRightCollisions(dt, topCollision)
     self.y = self.y - 1
     local objectCollisions = self:checkObjectCollisions()
     self.y = self.y + 1
+
     for i, object in pairs(objectCollisions) do
         if self.x + self.width > object.x then
             self.x = self.x - self.dx * dt
             return true
         end
     end
-
-    -- check object collisions and reset position if so
-    --[[local objectCollisions = self:checkObjectCollisions()
-    if #objectCollisions > 0 then
-        --print('RIGHT object collision detected')
-        self.x = self.x - self.dx * dt
-        return true
-    end]]
 
     return false
 end
@@ -92,27 +84,27 @@ function Robot:checkObjectCollisions()
     local collidedObjects = {}
 
     for i, object in pairs(self.level.objects) do
-        if object:collides(self) then
-            if object.impassible then
-                table.insert(collidedObjects, object)
-            --elseif object.consumable then
-            --    object.onConsume(self)
-            --    table.remove(self.level.objects, k)
-            end
+        if object:collides(self) and object.impassible then
+            table.insert(collidedObjects, object)
         end
     end
 
     return collidedObjects
 end
 
+-- Check whether this robot has made its way to the exit door;
+-- 'collidable' is used to ensure things only happen once
 function Robot:checkExitCollision()
     if self.level.outDoor:collides(self) then
-        print('exit door')
+        if self.collidable then
+            gSounds['out_door']:stop()
+            gSounds['out_door']:play()
+        end
+
         self.dx = 0
         self.dy = 0
-        self.level.outDoor.stateMachine.current:onRobotCollide(self)
-        self.exit = true
-        self.collidable = false
-        self:changeState('idle')
+        self.level.outDoor.stateMachine.current:onRobotCollide(self) -- door callback
+        self.collidable = false -- change collidable flag per above
+        self:changeState('idle') -- change animation while exiting
     end
 end

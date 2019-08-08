@@ -1,3 +1,5 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 DoorIdleState = Class{__includes = BaseState}
 
 function DoorIdleState:init(door)
@@ -10,10 +12,9 @@ function DoorIdleState:init(door)
     self.door.currentAnimation = self.animation
 end
 
-function DoorIdleState:enter(params)
+function DoorIdleState:enter(params) end
 
-end
-
+-- robot should wait until door opens and then enter/fade away; update saved robots in level
 function DoorIdleState:onRobotCollide(robot)
     if robot.collidable then
         local tweenX = robot.direction == 'right' and (robot.x + TILE_SIZE) or (robot.x - TILE_SIZE)
@@ -28,6 +29,4 @@ function DoorIdleState:onRobotCollide(robot)
     end
 end
 
-function DoorIdleState:update(dt)
-
-end
+function DoorIdleState:update(dt) end

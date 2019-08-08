@@ -1,3 +1,5 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 StartState = Class{__includes = BaseState}
 
 function StartState:update(dt)

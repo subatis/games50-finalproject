@@ -1,7 +1,11 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 DoorOpenState = Class{__includes = BaseState}
 
 function DoorOpenState:init(door)
     self.door = door
+
+    -- different animations for in and out doors
     self.animation = self.door.type == 'in' and Animation {
         frames = { DOORFRAMES['IN_1'],
                    DOORFRAMES['IN_2'],
@@ -32,10 +36,9 @@ function DoorOpenState:init(door)
     self.door.currentAnimation = self.animation
 end
 
-function DoorOpenState:enter(params)
+function DoorOpenState:enter(params) end
 
-end
-
+-- wait for door to open, disappear, update level robotsSaved
 function DoorOpenState:onRobotCollide(robot)
     if robot.collidable then
         local tweenX = robot.direction == 'right' and (robot.x + TILE_SIZE) or (robot.x - TILE_SIZE)
@@ -50,6 +53,7 @@ function DoorOpenState:onRobotCollide(robot)
     end
 end
 
+-- in doors should spwan robots
 function DoorOpenState:update(dt)
     self.door.currentAnimation:update(dt)
 

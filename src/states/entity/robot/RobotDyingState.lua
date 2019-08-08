@@ -1,3 +1,5 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 RobotDyingState = Class{__includes = BaseState}
 
 function RobotDyingState:init(robot)
@@ -11,10 +13,10 @@ function RobotDyingState:init(robot)
 end
 
 function RobotDyingState:enter()
-    --print('dying')
+    gSounds['robot_death']:play()
 end
 
--- Finish explosion once and delete obj
+-- Finish explosion once and delete, update level with a lost robot
 function RobotDyingState:update(dt)
     self.robot.currentAnimation:update(dt)
 

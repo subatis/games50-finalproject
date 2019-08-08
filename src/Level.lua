@@ -1,12 +1,14 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 Level = Class{}
 
 function Level:init(def)
     self.map = def.map
     self.player = def.player
     self.background = gBackgrounds[def.background] or gBackgrounds['city_night']
-    self.numRobots = def.numRobots or DEFAULT_NUM_ROBOTS
-    self.goalRobots = def.goalRobots or DEFAULT_GOAL_ROBOTS
-    self.spawnTime = def.spawnTime or DEFAULT_ROBOT_SPAWN_TIME
+    self.numRobots = self.map.numRobots or DEFAULT_NUM_ROBOTS
+    self.goalRobots = self.map.goalRobots or DEFAULT_GOAL_ROBOTS
+    self.spawnTime = self.map.spawnTime or DEFAULT_ROBOT_SPAWN_TIME
     self.robotsLost = 0
     self.robotsSaved = 0
     self.robots = {}
@@ -18,11 +20,13 @@ function Level:init(def)
 
     -- spawn robots
     Timer.every(self.spawnTime, function()
+                    gSounds['in_door']:play()
                     self.inDoor:changeState('open')
                 end):limit(self.numRobots) -- only spawn numRobots
 end
 
 function Level:generateDoors()
+    -- get door coordinates for this map
     local inDoorX = (self.map.inDoorX - 1) * TILE_SIZE
     local inDoorY = (self.map.inDoorY - 1) * TILE_SIZE
     local outDoorX = (self.map.outDoorX - 1) * TILE_SIZE
@@ -35,18 +39,20 @@ function Level:generateDoors()
     self.outDoor:changeState('idle')
 end
 
+-- did we beat the level or game?
 function Level:checkVictory()
     if self.robotsSaved >= self.goalRobots then
-        -- did we beat the game?
-        if gLevelNum == 1 then
+        if gLevelNum == 3 then
+            gLevelNum = 1
             gStateMachine:change('victory')
         else
-            -- TODO gLevelNum = gLevelNum + 1
+            gLevelNum = gLevelNum + 1
             gStateMachine:change('countdown')
         end
     end
 end
 
+-- are we screwed?
 function Level:checkGameOver()
     if self.numRobots - self.robotsLost < self.goalRobots then
         gLevelNum = 1
@@ -69,14 +75,12 @@ function Level:update(dt)
 
     -- clean up robots & objects
     for i, robot in pairs(self.robots) do
-        -- if robot is marked for removal, clear TODO FIX
         if self.robots[i].remove then
             table.remove(self.robots, i)
         end
     end
 
     for i, object in pairs(self.objects) do
-        -- if object is marked for removal, clear TODO FIX
         if self.objects[i].remove then
             table.remove(self.objects, i)
         end

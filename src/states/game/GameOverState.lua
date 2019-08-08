@@ -1,3 +1,5 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 GameOverState = Class{__includes = BaseState}
 
 function GameOverState:update(dt)

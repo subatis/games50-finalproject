@@ -1,12 +1,17 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 RobotBombExplodingState = Class{__includes = BaseState}
 
 function RobotBombExplodingState:init(robot)
     self.robot = robot
     self.robot.texture = 'explosion'
+
+    -- scale new explosion image down
     self.robot.scaleX = self.robot.scaleX / 2
     self.robot.scaleY = self.robot.scaleY / 2
     self.robot.originX = 96 / 2
     self.robot.originY = 96 / 2
+
     self.animation = Animation {
         frames = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 },
         interval = 0.1
@@ -15,7 +20,7 @@ function RobotBombExplodingState:init(robot)
 end
 
 function RobotBombExplodingState:enter()
-    print('bomb')
+    gSounds['robot_bomb']:play()
 
     -- destroy touching/surrounding tiles
     local tiles = {}
@@ -39,7 +44,7 @@ function RobotBombExplodingState:enter()
     end
 end
 
--- Finish explosion once and delete obj
+-- Finish explosion once and delete robot, update level with a lost robot
 function RobotBombExplodingState:update(dt)
     self.robot.currentAnimation:update(dt)
 

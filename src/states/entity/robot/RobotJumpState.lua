@@ -1,3 +1,5 @@
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50 ]]
+
 RobotJumpState = Class{__includes = BaseState}
 
 function RobotJumpState:init(robot)
@@ -11,7 +13,7 @@ function RobotJumpState:init(robot)
 end
 
 function RobotJumpState:enter(params)
-    --gSounds['jump']:play()
+    gSounds['robot_jump']:play()
     self.robot.dy = ROBOT_JUMP_VELOCITY
 end
 
@@ -37,6 +39,7 @@ function RobotJumpState:update(dt)
         self.robot.y = tileLeft.y * TILE_SIZE - 1 -- shift down to below tile
         self.robot:changeState('falling')
 
+    -- check left/right collisions/update x direction
     elseif self.robot.direction == 'left' then
         self.robot.dx = -ROBOT_WALK_SPEED
         self.robot.x = self.robot.x + (self.robot.dx * dt)
@@ -46,17 +49,4 @@ function RobotJumpState:update(dt)
         self.robot.x = self.robot.x + (self.robot.dx * dt)
         self.robot:checkRightCollisions(dt)
     end
-
-    --[[ DEBUG: manual input
-    -- else test our sides
-    elseif love.keyboard.isDown('left') then
-        self.robot.direction = 'left'
-        self.robot.x = self.robot.x - ROBOT_WALK_SPEED * dt
-        self.robot:checkLeftCollisions(dt)
-    elseif love.keyboard.isDown('right') then
-        self.robot.direction = 'right'
-        self.robot.x = self.robot.x + ROBOT_WALK_SPEED * dt
-        self.robot:checkRightCollisions(dt)
-    end
-    ]]
 end

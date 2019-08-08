@@ -1,1 +1,13 @@
+robots: https://opengameart.org/content/green-robot
+tileset: https://opengameart.org/content/extension-for-sci-fi-platformer-tiles-32x32
+city background: https://opengameart.org/content/city-background-repetitive-3
 font: https://www.1001fonts.com/boo-city-font.html
+music: https://opengameart.org/content/dawn-of-derangements
+sci-fi sounds: https://opengameart.org/content/50-cc0-sci-fi-sfx
+doors: https://opengameart.org/content/metroid-megaman-zero-like-doors
+explosion: https://opengameart.org/content/pixel-explosion-12-frames
+other explosions (robot death): https://opengameart.org/content/explosion-set-2-m484-games
+
+...other sounds generated with Bfxr and/or edited in Audacity 
+...other images drawn on piskepp.com
+

@@ -1,29 +1,29 @@
---[[
-    GD50
-    -- Super Mario Bros. Remake --
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50;
+     core code from:
+            GD50
+            -- Super Mario Bros. Remake --
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
-
-    ...with edits/additions by Erik Subatis 7/2019
+            Author: Colton Ogden
+            cogden@cs50.harvard.edu
 ]]
 
 GameObject = Class{}
 
 function GameObject:init(def)
+    -- coordinates, dimensions, etc
     self.x = def.x
     self.y = def.y
     self.texture = def.texture
     self.width = def.width
     self.height = def.height
+
+    -- render info
+    self.animation = def.animation or nil
     self.frame = def.frame
+
+    -- state
     self.impassible = def.impassible
     self.collidable = def.collidable
-    self.consumable = def.consumable
-    self.onCollide = def.onCollide
-    self.onConsume = def.onConsume
-    self.hit = def.hit
-    self.animation = def.animation or nil
     if def.visible == false then self.visible = false else self.visible = true end
     self.remove = false
 end

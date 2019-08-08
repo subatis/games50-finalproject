@@ -1,9 +1,10 @@
---[[
-    GD50
-    Legend of Zelda
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50;
+     core code from:
+            GD50
+            Legend of Zelda
 
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+            Author: Colton Ogden
+            cogden@cs50.harvard.edu
 ]]
 
 PlayState = Class{__includes = BaseState}
@@ -25,15 +26,16 @@ function PlayState:init()
                        }
 end
 
+-- update level
 function PlayState:update(dt)
     if love.keyboard.wasPressed('escape') then
         love.event.quit()
     end
 
-    -- update level
     self.level:update(dt)
 end
 
+-- draw level
 function PlayState:render()
     self.level:draw()
 end

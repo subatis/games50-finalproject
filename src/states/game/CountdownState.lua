@@ -1,11 +1,12 @@
---[[
-    Countdown State
-    Author: Colton Ogden
-    cogden@cs50.harvard.edu
+--[[ For "DRONES" by Erik Subatis 2019, final project for GD50;
+     credit:
+        Countdown State
+        Author: Colton Ogden
+        cogden@cs50.harvard.edu
 
-    Counts down visually on the screen (3,2,1) so that the player knows the
-    game is about to begin. Transitions to the PlayState as soon as the
-    countdown is complete.
+        Counts down visually on the screen (3,2,1) so that the player knows the
+        game is about to begin. Transitions to the PlayState as soon as the
+        countdown is complete.
 ]]
 
 CountdownState = Class{__includes = BaseState}
