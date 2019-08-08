@@ -71,6 +71,7 @@ function Gui:draw()
 
     love.graphics.setColor(255, 255, 255, 255)
     love.graphics.setFont(gFonts['medium'])
-    love.graphics.printf('SAVED: ' .. tostring(self.level.robotsSaved) .. ' | GOAL: ' .. tostring(self.level.goalRobots),
+    love.graphics.printf('level ' .. tostring(gLevelNum) .. ' | TOTAL: ' .. tostring(self.level.numRobots) .. ' | LOST: ' .. tostring(self.level.robotsLost) ..
+    ' | SAVED: ' .. tostring(self.level.robotsSaved) .. ' | GOAL: ' .. tostring(self.level.goalRobots),
                          0, VIRTUAL_HEIGHT - TILE_SIZE, VIRTUAL_WIDTH, 'right')
 end

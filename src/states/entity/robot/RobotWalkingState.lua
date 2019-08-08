@@ -60,4 +60,9 @@ function RobotWalkingState:update(dt)
 
     -- check if we have collided with the exit
     self.robot:checkExitCollision()
+
+    -- check if we have gone off screen
+    if self.robot.x + self.robot.width < 0 or self.robot.x > VIRTUAL_WIDTH then
+        self.robot:changeState('dying')
+    end
 end

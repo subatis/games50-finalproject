@@ -16,16 +16,15 @@ function RobotBlockState:enter(params)
     gSounds['robot_block']:play()
     self.robot.dx = 0
 
+    -- this robot can no longer be saved
+    self.robot.level.robotsLost = self.robot.level.robotsLost + 1
+
     -- create impassible game object on the map (invisible, since the sprite is the robot)
-    local block = gFactory:makeInvisibleBlock(self.robot.x, self.robot.y, self.robot.width, self.robot.height)
+    -- slightly smaller than tile_size
+    local block = gFactory:makeInvisibleBlock(self.robot.x + 6, self.robot.y + 6, self.robot.width - 6, self.robot.height - 6)
     table.insert(self.robot.level.objects, block)
 end
 
--- input; can apply bomb tool
-function RobotBlockState:handleClick()
-    if self.robot.level.player.tool == TOOLDEFS['BOMB'] then
-        self.robot:changeState('bomb')
-    end
-end
+function RobotBlockState:handleClick() end
 
 function RobotBlockState:update(dt) end
